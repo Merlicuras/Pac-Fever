@@ -3,8 +3,7 @@ using System.Collections;
 
 public class Cheese : PointObject {
 
-	Cheese()
-	{
+	Cheese(){
 		//Cheese = 5 points.
 		this.point = 5;
 	}
@@ -16,4 +15,5 @@ public class Cheese : PointObject {
 	
 	// Update is called once per frame
 	void Update () {}
+
 }

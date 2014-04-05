@@ -5,5 +5,11 @@ using System.Collections;
 public abstract class PointObject : MonoBehaviour {
 
 	protected int point {get; set;}
-	
+
+	void OnTriggerEnter(Collider other){
+		if(other.gameObject.name == "pacman"){
+			Destroy(this.gameObject);
+			Debug.Log ("collision");
+		}
+	}
 }

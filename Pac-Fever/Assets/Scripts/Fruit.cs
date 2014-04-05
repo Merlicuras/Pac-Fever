@@ -4,8 +4,7 @@ using System.Collections;
 public class Fruit : PointObject {
 
 
-	Fruit()
-	{
+	Fruit(){
 		//Fruit = 100 points.
 		this.point = 100;
 	}

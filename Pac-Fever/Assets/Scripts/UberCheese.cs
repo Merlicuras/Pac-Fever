@@ -3,8 +3,7 @@ using System.Collections;
 
 public class UberCheese : PointObject {
 
-		UberCheese()
-	{
+	UberCheese(){
 		//UberCheese = 50 points.
 		this.point = 50;
 	}
