@@ -1,20 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Fruit : PointObject {
+public class UberCheese : PointObject {
 
-
-	Fruit()
+		UberCheese()
 	{
-		//Fruit = 100 points.
-		this.point = 100;
+		//UberCheese = 50 points.
+		this.point = 50;
 	}
-
+	
 	// Use this for initialization
 	void Start () {
 		Debug.Log (point);
 	}
-	
+
 	// Update is called once per frame
 	void Update () {}
 }

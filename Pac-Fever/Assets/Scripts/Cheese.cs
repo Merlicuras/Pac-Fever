@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Fruit : PointObject {
+public class Cheese : PointObject {
 
-
-	Fruit()
+	Cheese()
 	{
-		//Fruit = 100 points.
-		this.point = 100;
+		//Cheese = 5 points.
+		this.point = 5;
 	}
 
 	// Use this for initialization
