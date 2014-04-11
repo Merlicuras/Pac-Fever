@@ -1,0 +1,17 @@
+﻿Revert "Merge branch 'master' of https://github.com/Merlicuras/Pac-Fever"
+
+This reverts commit 2b7e91769230cc2848fd57f0fcfd6cbbe9eb48bb, reversing
+changes made to 23a8a0dc4827db845f6ab14fa9efecc843918af6.
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	deleted:    PacFever/PacFever/PacFever.csproj
+#	deleted:    PacFever/PacFever/Pacman.cs
+#	deleted:    PacFever/PacFever/bin/Debug/PacFever.exe
+#	deleted:    PacFever/PacFever/bin/Debug/PacFever.exe.mdb
+#
+
