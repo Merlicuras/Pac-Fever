@@ -26,8 +26,8 @@ public class Pacman : MonoBehaviour {
 		
 		if (Input.GetKeyDown(KeyCode.W))
 			transform.position += new Vector3(0, 2.0f, 0);
-		if(Input.GetKeyDown(KeyCode.S))
-			transform.position += new Vector3(0, -2.0f, 0);
+		if (Input.GetKeyDown (KeyCode.S))
+						direction = Vector3.up * -1;
 
 		transform.Translate (direction * speed);
 
