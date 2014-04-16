@@ -3,10 +3,13 @@ using System.Collections;
 
 public class Pacman : MonoBehaviour {
 
+	public float speed = 0.1f;
+	public Vector3 direction;
+
 	// Use this for initialization
 	void Start () {
 
-		public float speed = 20.0f;
+
 
 	}
 	
@@ -15,8 +18,8 @@ public class Pacman : MonoBehaviour {
 
 		transform.position = transform.position + new Vector3(0,  0,  speed) * Time.deltaTime;
 		
-		if(Input.GetKeyDown(KeyCode.A))
-			transform.position += new Vector3(-2.0f, 0, 0);
+		if (Input.GetKeyDown (KeyCode.A))
+			direction = Vector3.right * -1;
 		
 		if(Input.GetKeyDown(KeyCode.D))
 			transform.position += new Vector3(2.0f, 0, 0);
@@ -25,6 +28,8 @@ public class Pacman : MonoBehaviour {
 			transform.position += new Vector3(0, 2.0f, 0);
 		if(Input.GetKeyDown(KeyCode.S))
 			transform.position += new Vector3(0, -2.0f, 0);
+
+		transform.Translate (direction * speed);
 
 	}
 }
