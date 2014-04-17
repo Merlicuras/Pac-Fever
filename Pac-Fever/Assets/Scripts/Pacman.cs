@@ -22,10 +22,10 @@ public class Pacman : MonoBehaviour {
 			direction = Vector3.right * -1;
 		
 		if(Input.GetKeyDown(KeyCode.D))
-			direction = Vector3.left;
+			direction = Vector3.left * -1;
 		
 		if (Input.GetKeyDown(KeyCode.W))
-			direction = Vector3.down;
+			direction = Vector3.down * -1;
 
 		if (Input.GetKeyDown (KeyCode.S))
 						direction = Vector3.up * -1;
