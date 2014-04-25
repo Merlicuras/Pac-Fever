@@ -66,7 +66,7 @@ public class CreateMap : MonoBehaviour {
 				else if (map[x,y] == 4)	{
 					//road with UberCheese
 					GameObject road = (GameObject)Instantiate(GameObject.Find("Road"), new Vector3(x, y, 0.0f));
-					GameObject road = (GameObject)Instantiate(GameObject.Find("Road"), new Vector3(x, y, 0.5f));
+					GameObject uberCheese = (GameObject)Instantiate(GameObject.Find("UberCheese"), new Vector3(x, y, 0.5f));
 															
 				}
 			}
