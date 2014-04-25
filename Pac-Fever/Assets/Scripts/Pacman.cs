@@ -6,16 +6,19 @@ public class Pacman : MovingObject {
 
 
 	private int lives;
-
+	private bool state;
+	public bool ghosts;
 	public GUIText winText;
 	public GUIText livesText;
+	public IEnumerator StateChange()
+	{
+		state = true;
+		yield return new WaitForSeconds(5);
+		state = false;
+	}
 
-	SetLivesText ();
-	winText.text = "";
 
-	private bool state;
-
-	public bool ghosts; //maybe this could be put in the ghosts' scripts to make them vulnerable?
+	 //maybe this could be put in the ghosts' scripts to make them vulnerable?
 
 
 
@@ -27,33 +30,34 @@ public class Pacman : MovingObject {
 			lives=lives-1;
 			SetLivesText ();
 		}
-	}
-
-	void OnTriggerEnter(Collider other){
 		if(other.gameObject.name == "UberCheese"){
-			state = true;
+			StartCoroutine(StateChange());
+
 			Debug.Log ("collision");
 		}
 	}
 	
+
 	// Use this for initialization
 	void Start () {
 		lives = 3;
 		state = false;
+		winText.text = " ";
+		SetLivesText ();
 
+	}
+
+	void SetLivesText (){
+		livesText.text = "Lives: " + lives.ToString();
+		if (lives <= 0){
+			winText.text = "GAME OVER";
+		}
 	}
 	
 	// Update is called once per frame
 	public override void Update () {
 
-		void SetLivesText (){
-			livesText.text = "Lives: " + lives.ToString();
-			if (lives <= 0){
-			winText.text = "GAME OVER";
-			}
-		}
-
-		if (state = true;)
+		if (state == true)
 			ghosts = true; //true = vulnerable
 
 
