@@ -19,7 +19,7 @@ public class CreateMap : MonoBehaviour {
 			{1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1},
 			{1,1,1,1,1,1,0,1,1,5,5,5,5,5,5,5,5,5,5,1,1,0,1,1,1,1,1,1},
 			{1,1,1,1,1,1,0,1,1,5,5,5,5,5,5,5,5,5,5,1,1,0,1,1,1,1,1,1},
-			{1,1,1,1,1,1,0,1,1,5,5,1,1,0,0,1,1,5,5,1,1,0,1,1,1,1,1,1},
+			{1,1,1,1,1,1,0,1,1,5,5,1,1,5,5,1,1,5,5,1,1,0,1,1,1,1,1,1},
 			{0,0,0,0,0,0,0,5,5,5,5,1,2,2,2,2,1,5,5,5,5,0,0,0,0,0,0,0},
 			{1,1,1,1,1,1,0,1,1,5,5,1,1,1,1,1,1,5,5,1,1,0,1,1,1,1,1,1},
 			{1,1,1,1,1,1,0,1,1,5,5,5,5,5,6,5,5,5,5,1,1,0,1,1,1,1,1,1},
@@ -59,9 +59,9 @@ public class CreateMap : MonoBehaviour {
 
 		Object ghostObject = Resources.Load("Prefabs/Ghost");
 		GameObject ghostGameObject = ghostObject as GameObject;
-
-		for (int x = 0; x < 31; x++){
+		
 			for (int y = 0; y < 28; y++){
+				for (int x = 0; x < 31; x++){
 				if (map[x,y] == 0){
 					//road with cheese
 					//Debug.Log ("y: " + y + ". x: " + x + ". Type: " + map[x,y]); //-Only used for testing the instantiate overload problem

@@ -10,7 +10,7 @@ public class UberCheese : PointObject {
 	
 	// Use this for initialization
 	void Start () {
-		Debug.Log (point);
+		base.Initialize();
 	}
 
 	// Update is called once per frame

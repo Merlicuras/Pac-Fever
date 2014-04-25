@@ -5,11 +5,23 @@ using System.Collections;
 public abstract class PointObject : MonoBehaviour {
 
 	protected int point {get; set;}
+	private GameObject scoreboard;
+
+	void Start()
+	{
+	}
+
+	protected void Initialize()
+	{
+		//Debug.Log("Debug Checkpoint: PointObject.Start"); //see if the child inherits
+		scoreboard = GameObject.FindGameObjectWithTag("Scoreboard");
+	}
 
 	void OnTriggerEnter(Collider other){
 		if(other.gameObject.tag == "Player"){
 			Destroy(this.gameObject);
 			Debug.Log ("collision");
+			scoreboard.SendMessage("AddPoints", point);
 		}
 	}
 }
