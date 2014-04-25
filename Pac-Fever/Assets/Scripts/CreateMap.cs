@@ -43,30 +43,30 @@ public class CreateMap : MonoBehaviour {
 			for (int x = 0; x < 32; x++){
 				if (map[x,y] == 0){
 					//road
-					GameObject road = (GameObject)Instantiate(GameObject.Find("Road"), new Vector3(x, y, 0.0f));
-					GameObject cheese = (GameObject)Instantiate(GameObject.Find("Cheese"), new Vector3(x, y, 0.5f));
+					GameObject road = (GameObject)Instantiate(GameObject.Find("Road"), new Vector3(x, y, 0.0f),Quaternion.identity);
+					GameObject cheese = (GameObject)Instantiate(GameObject.Find("Cheese"), new Vector3(x, y, 0.5f),Quaternion.identity);
 
 				}
 				else if (map[x,y] == 1){
 					//wall
-					GameObject wall = (GameObject)Instantiate(GameObject.Find("Wall"), new Vector3(x, y, 0.0f));
+					GameObject wall = (GameObject)Instantiate(GameObject.Find("Wall"), new Vector3(x, y, 0.0f),Quaternion.identity);
 				}
 				else if (map[x,y] == 2)	{
 					//road with ghost spawn
-					GameObject road = (GameObject)Instantiate(GameObject.Find("Road"), new Vector3(x, y, 0.0f));
+					GameObject road = (GameObject)Instantiate(GameObject.Find("Road"), new Vector3(x, y, 0.0f),Quaternion.identity);
 					//ghost
-					GameObject ghost = (GameObject)Instantiate(GameObject.Find("Ghost"), new Vector3(x, y, 0.5f));
+					GameObject ghost = (GameObject)Instantiate(GameObject.Find("Ghost"), new Vector3(x, y, 0.5f),Quaternion.identity);
 				}
 				else if (map[x,y] == 3){
 					//road with pacman spawn
-					GameObject road = (GameObject)Instantiate(GameObject.Find("Road"), new Vector3(x, y, 0.0f));
-					GameObject pacman = (GameObject)Instantiate(GameObject.Find("Pacman"), new Vector3(x, y, 0.0f));
+					GameObject road = (GameObject)Instantiate(GameObject.Find("Road"), new Vector3(x, y, 0.0f),Quaternion.identity);
+					GameObject pacman = (GameObject)Instantiate(GameObject.Find("Pacman"), new Vector3(x, y, 0.0f),Quaternion.identity);
 
 				}
 				else if (map[x,y] == 4)	{
 					//road with UberCheese
-					GameObject road = (GameObject)Instantiate(GameObject.Find("Road"), new Vector3(x, y, 0.0f));
-					GameObject uberCheese = (GameObject)Instantiate(GameObject.Find("UberCheese"), new Vector3(x, y, 0.5f));
+					GameObject road = (GameObject)Instantiate(GameObject.Find("Road"), new Vector3(x, y, 0.0f),Quaternion.identity);
+					GameObject uberCheese = (GameObject)Instantiate(GameObject.Find("UberCheese"), new Vector3(x, y, 0.5f),Quaternion.identity);
 															
 				}
 			}
