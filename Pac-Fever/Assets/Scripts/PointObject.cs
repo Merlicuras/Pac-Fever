@@ -7,7 +7,7 @@ public abstract class PointObject : MonoBehaviour {
 	protected int point {get; set;}
 
 	void OnTriggerEnter(Collider other){
-		if(other.gameObject.name == "pacman"){
+		if(other.gameObject.name == "Pacman"){
 			Destroy(this.gameObject);
 			Debug.Log ("collision");
 		}
