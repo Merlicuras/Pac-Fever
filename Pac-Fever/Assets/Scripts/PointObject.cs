@@ -6,6 +6,7 @@ public abstract class PointObject : MonoBehaviour {
 
 	protected int point {get; set;}
 	private GameObject scoreboard;
+	private GameObject mapCreate;
 
 	void Start()
 	{
@@ -19,9 +20,15 @@ public abstract class PointObject : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other){
 		if(other.gameObject.tag == "Player"){
-			Destroy(this.gameObject);
 			Debug.Log ("collision");
 			scoreboard.SendMessage("AddPoints", point);
+			if(this.gameObject.tag == "Fruit"){
+				Debug.Log ("Fruit collision");
+				mapCreate = GameObject.FindGameObjectWithTag("MapCreate");
+				Vector3 fruit = this.gameObject.transform.position;
+				mapCreate.SendMessage("FruitRespawn", fruit);
+			}
+			Destroy(this.gameObject);
 		}
 	}
 }

@@ -3,6 +3,14 @@ using System.Collections;
 
 public class CreateMap : MonoBehaviour {
 
+	Object roadObject;
+	Object wallObject;
+	Object fruitObject;
+	Object cheeseObject;
+	Object uberCheeseObject;
+	Object pacmanObject;
+	Object ghostObject;
+
 	// Use this for initialization
 	void Start () {
 		int[,] map = {
@@ -22,8 +30,8 @@ public class CreateMap : MonoBehaviour {
 			{1,1,1,1,1,1,0,1,1,5,5,1,1,5,5,1,1,5,5,1,1,0,1,1,1,1,1,1},
 			{0,0,0,0,0,0,0,5,5,5,5,1,2,2,2,2,1,5,5,5,5,0,0,0,0,0,0,0},
 			{1,1,1,1,1,1,0,1,1,5,5,1,1,1,1,1,1,5,5,1,1,0,1,1,1,1,1,1},
-			{1,1,1,1,1,1,0,1,1,5,5,5,5,5,6,5,5,5,5,1,1,0,1,1,1,1,1,1},
 			{1,1,1,1,1,1,0,1,1,5,5,5,5,5,5,5,5,5,5,1,1,0,1,1,1,1,1,1},
+			{1,1,1,1,1,1,0,1,1,5,5,5,5,5,6,5,5,5,5,1,1,0,1,1,1,1,1,1},
 			{1,1,1,1,1,1,0,1,1,5,1,1,1,1,1,1,1,1,5,1,1,0,1,1,1,1,1,1},
 			{1,1,1,1,1,1,0,1,1,5,1,1,1,1,1,1,1,1,5,1,1,0,1,1,1,1,1,1},
 			{1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -39,25 +47,25 @@ public class CreateMap : MonoBehaviour {
 			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 		};
 		
-		Object roadObject = Resources.Load("Prefabs/Road");
+		roadObject = Resources.Load("Prefabs/Road");
 		GameObject roadGameObject = roadObject as GameObject;
 
-		Object wallObject = Resources.Load("Prefabs/Wall");
+		wallObject = Resources.Load("Prefabs/Wall");
 		GameObject wallGameObject = wallObject as GameObject;
 
-		Object fruitObject = Resources.Load("Prefabs/Fruit");
+		fruitObject = Resources.Load("Prefabs/Fruit");
 		GameObject fruitGameObject = fruitObject as GameObject;
 
-		Object cheeseObject = Resources.Load("Prefabs/Cheese");
+		cheeseObject = Resources.Load("Prefabs/Cheese");
 		GameObject cheeseGameObject = cheeseObject as GameObject;
 
-		Object uberCheeseObject = Resources.Load("Prefabs/UberCheese");
+		uberCheeseObject = Resources.Load("Prefabs/UberCheese");
 		GameObject uberCheeseGameObject = uberCheeseObject as GameObject;
 
-		Object pacmanObject = Resources.Load("Prefabs/Pacman");
+		pacmanObject = Resources.Load("Prefabs/Pacman");
 		GameObject pacmanGameObject = pacmanObject as GameObject;
 
-		Object ghostObject = Resources.Load("Prefabs/Ghost");
+		ghostObject = Resources.Load("Prefabs/Ghost");
 		GameObject ghostGameObject = ghostObject as GameObject;
 		
 			for (int y = 0; y < 28; y++){
@@ -95,7 +103,7 @@ public class CreateMap : MonoBehaviour {
 				else if (map[x,y] == 6)	{
 					//road with Fruit
 					GameObject roadSpawned = Instantiate(roadGameObject, new Vector3(x,0,y),Quaternion.identity) as GameObject;
-					GameObject fruitSpawned = Instantiate(fruitGameObject, new Vector3(x,0.5f,y),Quaternion.identity) as GameObject;
+					GameObject fruitSpawned = Instantiate(fruitGameObject, new Vector3(x,0.5f,y),fruitGameObject.transform.rotation) as GameObject;
 				}
 			}
 		}
@@ -103,5 +111,15 @@ public class CreateMap : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {	}
+
+	public IEnumerator FruitRespawn(Vector3 fruit){
+		fruitObject = Resources.Load("Prefabs/Fruit");
+		GameObject fruitGameObject = fruitObject as GameObject;
+
+		yield return new WaitForSeconds(20);
+		Debug.Log ("Fruit spawn");
+		GameObject fruitRespawn = Instantiate(fruitGameObject,fruit ,fruitGameObject.transform.rotation) as GameObject;
+		
+	}
 
 }
