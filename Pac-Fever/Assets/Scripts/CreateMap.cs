@@ -52,8 +52,8 @@ public class CreateMap : MonoBehaviour {
 
 		//Sideways array for standard map.
 		int[,] map = {
-			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1}, 
-			{1,0,0,0,0,1,1,4,0,0,0,1,1,1,1,1,0,1,1,1,1,1,0,0,0,0,0,4,0,0,1}, 
+			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}, 
+			{1,0,0,0,0,1,1,4,0,0,0,1,1,1,1,1,7,1,1,1,1,1,0,0,0,0,0,4,0,0,1}, 
 			{1,0,1,1,0,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,0,1}, 
 			{1,0,1,1,0,0,0,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,0,1}, 
 			{1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,0,1}, 
@@ -78,8 +78,8 @@ public class CreateMap : MonoBehaviour {
 			{1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,0,1}, 
 			{1,0,1,1,0,0,0,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,0,1}, 
 			{1,0,1,1,0,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,0,1}, 
-			{1,0,0,0,0,1,1,4,0,0,0,1,1,1,1,1,0,1,1,1,1,1,0,0,0,0,0,4,0,0,1}, 
-			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+			{1,0,0,0,0,1,1,4,0,0,0,1,1,1,1,1,7,1,1,1,1,1,0,0,0,0,0,4,0,0,1}, 
+			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 		};
 		
 		roadObject = Resources.Load("Prefabs/Road");
@@ -109,11 +109,11 @@ public class CreateMap : MonoBehaviour {
 					//road with cheese
 					//Debug.Log ("y: " + y + ". x: " + x + ". Type: " + map[y,x]); //-Only used for testing the instantiate overload problem
 					GameObject roadSpawned = Instantiate(roadGameObject, new Vector3(x,0,y),Quaternion.identity) as GameObject;
-					GameObject cheeseSpawned = Instantiate(cheeseGameObject, new Vector3(x,0.5f,y),Quaternion.identity) as GameObject;
+					GameObject cheeseSpawned = Instantiate(cheeseGameObject, new Vector3(x,0.75f,y),Quaternion.identity) as GameObject;
 				}
 				else if (map[x,y] == 1){
 					//wall
-					GameObject wallSpawned = Instantiate(wallGameObject, new Vector3(x,0,y),Quaternion.identity) as GameObject;
+					GameObject wallSpawned = Instantiate(wallGameObject, new Vector3(x,0.75f,y),Quaternion.identity) as GameObject;
 				}
 				else if (map[x,y] == 2)	{
 					//road with ghost spawn
@@ -124,12 +124,12 @@ public class CreateMap : MonoBehaviour {
 				else if (map[x,y] == 3){
 					//road with pacman spawn
 					GameObject roadSpawned = Instantiate(roadGameObject, new Vector3(x,0,y),Quaternion.identity) as GameObject;
-					GameObject pacmanSpawned = Instantiate(pacmanGameObject, new Vector3(x,0.5f,y),Quaternion.identity) as GameObject;
+					GameObject pacmanSpawned = Instantiate(pacmanGameObject, new Vector3(x,0.75f,y),Quaternion.identity) as GameObject;
 				}
 				else if (map[x,y] == 4)	{
 					//road with UberCheese
 					GameObject roadSpawned = Instantiate(roadGameObject, new Vector3(x,0,y),Quaternion.identity) as GameObject;
-					GameObject uberCheeseSpawned = Instantiate(uberCheeseGameObject, new Vector3(x,0.5f,y),Quaternion.identity) as GameObject;											
+					GameObject uberCheeseSpawned = Instantiate(uberCheeseGameObject, new Vector3(x,0.75f,y),Quaternion.identity) as GameObject;											
 				}
 				else if (map[x,y] == 5)	{
 					//road without cheese
@@ -138,7 +138,11 @@ public class CreateMap : MonoBehaviour {
 				else if (map[x,y] == 6)	{
 					//road with Fruit
 					GameObject roadSpawned = Instantiate(roadGameObject, new Vector3(x,0,y),Quaternion.identity) as GameObject;
-					GameObject fruitSpawned = Instantiate(fruitGameObject, new Vector3(x,0.5f,y),fruitGameObject.transform.rotation) as GameObject;
+					GameObject fruitSpawned = Instantiate(fruitGameObject, new Vector3(x,0.75f,y),fruitGameObject.transform.rotation) as GameObject;
+				}
+				else if (map[x,y] == 7)	{
+					//road without secret passage
+					GameObject roadSpawned = Instantiate(roadGameObject, new Vector3(x,0,y),Quaternion.identity) as GameObject;
 				}
 			}
 		}
