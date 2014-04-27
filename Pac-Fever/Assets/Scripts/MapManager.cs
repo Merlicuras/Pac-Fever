@@ -1,15 +1,16 @@
 using UnityEngine;
 using System.Collections;
 
-public class CreateMap : MonoBehaviour {
+public class MapManager : MonoBehaviour {
 
-	Object roadObject;
-	Object wallObject;
-	Object fruitObject;
-	Object cheeseObject;
-	Object uberCheeseObject;
-	Object pacmanObject;
-	Object ghostObject;
+	private Object roadObject;
+	private Object wallObject;
+	private Object fruitObject;
+	private Object cheeseObject;
+	private Object uberCheeseObject;
+	private Object pacmanObject;
+	private Object ghostObject;
+	public int[,] map {get; set;} 
 
 	// Use this for initialization
 	void Start () {
@@ -51,7 +52,7 @@ public class CreateMap : MonoBehaviour {
 		*/
 
 		//Sideways array for standard map.
-		int[,] map = {
+		map = new int[,] {
 			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}, 
 			{1,0,0,0,0,1,1,4,0,0,0,1,1,1,1,1,7,1,1,1,1,1,0,0,0,0,0,4,0,0,1}, 
 			{1,0,1,1,0,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,0,1}, 
