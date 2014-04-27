@@ -3,8 +3,7 @@ using System.Collections;
 
 public class Pacman : MovingObject {
 
-
-
+	
 	private int lives;
 	private bool state;
 	public bool ghosts;
@@ -18,7 +17,6 @@ public class Pacman : MovingObject {
 	}
 
 
-	 //maybe this could be put in the ghosts' scripts to make them vulnerable?
 
 
 
@@ -57,6 +55,7 @@ public class Pacman : MovingObject {
 	// Update is called once per frame
 	public override void Update () {
 
+
 		if (state == true)
 			ghosts = true; //true = vulnerable
 
@@ -74,6 +73,9 @@ public class Pacman : MovingObject {
 			base.down ();
 
 		base.Update ();
+		//Denne her skal lige ned under base.Update. Jeg kan ikke cut-paste. :)
+		Vector3 fixedHeight = new Vector3 (transform.position.x, 1, transform.position.z);
+		transform.position = fixedHeight;
 
 	}
 }

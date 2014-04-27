@@ -16,11 +16,12 @@ public class MovingObject : MonoBehaviour {
 		direction = Vector3.left;
 	}
 	public void down (){
-		direction = Vector3.down;
+		direction = Vector3.back;
 	}
 	public void up()
 	{
-		direction = Vector3.up;
+		//tror det er her
+		direction = Vector3.forward;
 	}
 	
 	// Use this for initialization
@@ -33,7 +34,7 @@ public class MovingObject : MonoBehaviour {
 	// Update is called once per frame
 	public virtual void Update () {
 		
-		transform.position = transform.position + new Vector3(0,  0,  speed) * Time.deltaTime;
+		//transform.position = transform.position + new Vector3(0,  0,  speed) * Time.deltaTime;
 		
 
 		
