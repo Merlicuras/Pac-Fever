@@ -26,7 +26,7 @@ public class MovingObject : MonoBehaviour {
 	}
 	
 	// Use this for initialization
-	void Start () {
+	public virtual void Start () {
 		
 		isMoving = true;	//Should be false, when GameManager can 
 						// handle activation of Pacman & Control

@@ -37,7 +37,7 @@ public class Pacman : MovingObject {
 	
 
 	// Use this for initialization
-	void Start () {
+	public override void Start () {
 		base.Start();
 		lives = 3;
 		state = false;
