@@ -38,6 +38,7 @@ public class Pacman : MovingObject {
 
 	// Use this for initialization
 	void Start () {
+		base.start();
 		lives = 3;
 		state = false;
 		winText.text = " ";
