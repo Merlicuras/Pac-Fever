@@ -9,6 +9,7 @@ public class GhostPink : Ghost {
 		
 		//base.scatter = top left
 		gameObject.tag = "GhostPink";
+		renderer.material.color = Color.Lerp(Color.magenta, Color.Lerp(Color.red, Color.white, 0.5f), 0.5f);
 		
 		GameObject mm = GameObject.FindGameObjectWithTag("MapCreate") as GameObject;
 		MapManager m = mm.GetComponent(typeof(MapManager)) as MapManager;

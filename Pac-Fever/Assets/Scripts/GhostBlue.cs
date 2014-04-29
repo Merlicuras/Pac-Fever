@@ -8,7 +8,7 @@ public class GhostBlue : Ghost {
 			base.Start();
 			//base.scatter = new Vector2(Bottom right, 2 down);
 			gameObject.tag = "GhostBlue";
-		
+			renderer.material.color = Color.blue;
 			GameObject mm = GameObject.FindGameObjectWithTag("MapCreate") as GameObject;
 			MapManager m = mm.GetComponent(typeof(MapManager)) as MapManager;
 			base.scatter = new Vector3(m.map.GetLength(0)-1,0,m.map.GetLength(1)+2);

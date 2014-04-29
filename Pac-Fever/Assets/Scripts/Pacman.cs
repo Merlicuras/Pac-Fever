@@ -20,18 +20,24 @@ public class Pacman : MovingObject {
 
 
 
-
+	void OnCollisionEnter(Collision c)
+	{
+		if (c.gameObject.tag == "Ghost")
+		{
+			Debug.Log("Success");
+		}
+	}
 	void OnTriggerEnter(Collider other){
-		if(other.gameObject.name == "ghost"){
+		if(other.gameObject.tag == "Ghost"){
 			Destroy(this.gameObject);
 			Debug.Log ("collision");
 			lives=lives-1;
 			SetLivesText ();
 		}
-		if(other.gameObject.name == "UberCheese"){
+		if(other.gameObject.tag == "UberCheese"){
 			StartCoroutine(StateChange());
 
-			Debug.Log ("collision");
+			Debug.Log ("uber collision");
 		}
 	}
 	

@@ -16,8 +16,8 @@ public class GameManager : MonoBehaviour {
 		level = 1;
 		cheeses = 0;
 		levelStage = 0;
-		pinkSecs = 10;
-		orangeSecs = 15;
+		pinkSecs = 5;
+		orangeSecs = 10;
 		startTime = Time.time;
 	}
 	
@@ -68,6 +68,19 @@ public class GameManager : MonoBehaviour {
 			levelStage = 4;
 			startTime = Time.time;
 			break;
+		}
+	}
+
+	public void uberCheese()
+	{
+		//Change mode to frightened on all ghosts (except dead ones)
+		GameObject[] ghosts;
+		ghosts = GameObject.FindGameObjectsWithTag("Ghost");
+			
+		foreach (GameObject ghost in ghosts) {
+			Ghost g = ghost.GetComponent("Ghost") as Ghost;
+			if(g.mode != Ghost.Mode.Dead)
+				g.changeMode(Ghost.Mode.Frightened);
 		}
 	}
 }

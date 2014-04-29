@@ -21,7 +21,6 @@ public abstract class PointObject : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other){
 		if(other.gameObject.tag == "Player"){
-			Debug.Log ("collision");
 			scoreboard.SendMessage("AddPoints", point);
 
 			GameManager gm = mapCreate.GetComponent("GameManager") as GameManager;

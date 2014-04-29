@@ -7,6 +7,7 @@ public class MovingObject : MonoBehaviour {
 	public float speed = 0.1f;
 	public Vector3 direction;
 	public bool isMoving;
+	MapManager m;
 
 	public void right ()
 	{
@@ -31,6 +32,9 @@ public class MovingObject : MonoBehaviour {
 		isMoving = true;	//Should be false, when GameManager can 
 						// handle activation of Pacman & Control
 		
+		
+		GameObject mm = GameObject.FindGameObjectWithTag ("MapCreate") as GameObject;
+		m = mm.GetComponent ("MapManager") as MapManager;
 	}
 	
 	// Update is called once per frame
@@ -42,6 +46,16 @@ public class MovingObject : MonoBehaviour {
 		if(isMoving)
 			transform.Translate (direction * speed);
 
+		Vector3 newLoc = transform.position;
+
+		if (m.map [Mathf.FloorToInt (transform.position.x), Mathf.FloorToInt (transform.position.z)] == 7)
+		{
+			if (transform.position.x < 3)
+				newLoc.x = m.map.GetLength (0) - 3;
+			else
+				newLoc.x = 2;
+		}
+		transform.position = newLoc;
 	}
 
 

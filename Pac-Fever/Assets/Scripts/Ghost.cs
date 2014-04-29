@@ -12,7 +12,7 @@ public class Ghost : MovingObject {
 	public Vector3 target;
 	
 	//Ghost current mode
-	Mode mode;
+	public Mode mode;
 	
 	protected Vector3 prevPos;
 	protected Vector3 turnDir;
@@ -29,7 +29,8 @@ public class Ghost : MovingObject {
 	public virtual void Start () {
 		base.Start ();
 
-		gameObject.collider.enabled = false;
+		gameObject.collider.enabled = true;
+		gameObject.tag = "Ghost";
 		//Ghost begin by going up
 		base.up();
 		
@@ -263,6 +264,7 @@ public class Ghost : MovingObject {
 			
 			case Mode.Dead:
 				//Become eyes, run back & respawn
+			Debug.Log(gameObject.tag + " Dead");
 				break;
 			
 			case Mode.Frightened:
@@ -294,6 +296,14 @@ public class Ghost : MovingObject {
 	{
 		// Target tile for pathfinding. Specific for each Ghost.
 	}
-	
+
+	void OnTriggerEnter(Collider other)
+	{
+		if (other.gameObject.tag == "Player")
+		{
+			if(mode == Mode.Frightened)
+				changeMode(Mode.Dead);
+		}
+	}
 }
 
