@@ -63,14 +63,14 @@ public class MapManager : MonoBehaviour {
 			{1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,5,1,1,1,1,1,1,1,1,0,1,1,1,0,1}, 
 			{1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,5,1,1,1,1,1,1,1,1,0,1,1,1,0,1}, 
 			{1,0,1,1,0,0,0,0,1,1,0,5,5,5,5,5,5,5,5,5,1,1,0,0,0,0,1,1,1,0,1}, 
-			{1,0,1,1,0,1,1,0,1,1,0,1,1,5,5,5,5,5,5,5,1,1,0,1,1,0,1,1,1,0,1}, 
-			{1,0,1,1,0,1,1,0,1,1,0,1,1,5,5,1,1,1,5,5,1,1,0,1,1,0,1,1,1,0,1}, 
-			{1,0,0,0,0,1,1,0,0,0,0,1,1,5,5,1,2,1,5,5,0,0,0,1,1,0,0,0,0,0,1}, 
-			{1,0,1,1,1,1,1,3,1,1,1,1,1,5,5,1,2,5,5,5,1,1,1,1,1,0,1,1,1,1,1},
-			{1,0,1,1,1,1,1,0,1,1,1,1,1,6,5,1,2,5,5,5,1,1,1,1,1,0,1,1,1,1,1},
-			{1,0,0,0,0,1,1,0,0,0,0,1,1,5,5,1,2,1,5,5,0,0,0,1,1,0,0,0,0,0,1}, 
-			{1,0,1,1,0,1,1,0,1,1,0,1,1,5,5,1,1,1,5,5,1,1,0,1,1,0,1,1,1,0,1}, 
-			{1,0,1,1,0,1,1,0,1,1,0,1,1,5,5,5,5,5,5,5,1,1,0,1,1,0,1,1,1,0,1}, 
+			{1,0,1,1,0,1,1,0,1,1,0,1,1,5,1,1,1,1,1,5,1,1,0,1,1,0,1,1,1,0,1}, 
+			{1,0,1,1,0,1,1,0,1,1,0,1,1,5,1,1,1,1,1,5,1,1,0,1,1,0,1,1,1,0,1}, 
+			{1,0,0,0,0,1,1,0,0,0,0,1,1,5,1,1,2,1,1,5,0,0,0,1,1,0,0,0,0,0,1}, 
+			{1,0,1,1,1,1,1,3,1,1,1,1,1,5,1,1,2,8,8,5,1,1,1,1,1,0,1,1,1,1,1},
+			{1,0,1,1,1,1,1,0,1,1,1,1,1,6,1,1,2,8,8,5,1,1,1,1,1,0,1,1,1,1,1},
+			{1,0,0,0,0,1,1,0,0,0,0,1,1,5,1,1,2,1,1,5,0,0,0,1,1,0,0,0,0,0,1}, 
+			{1,0,1,1,0,1,1,0,1,1,0,1,1,5,1,1,1,1,1,5,1,1,0,1,1,0,1,1,1,0,1}, 
+			{1,0,1,1,0,1,1,0,1,1,0,1,1,5,1,1,1,1,1,5,1,1,0,1,1,0,1,1,1,0,1}, 
 			{1,0,1,1,0,0,0,0,1,1,0,5,5,5,5,5,5,5,5,5,1,1,0,0,0,0,1,1,1,0,1}, 
 			{1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,5,1,1,1,1,1,1,1,1,0,1,1,1,0,1}, 
 			{1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,5,1,1,1,1,1,1,1,1,0,1,1,1,0,1}, 
@@ -104,6 +104,8 @@ public class MapManager : MonoBehaviour {
 		ghostObject = Resources.Load("Prefabs/Ghost");
 		GameObject ghostGameObject = ghostObject as GameObject;
 
+		int ghostNum = 0;
+
 		for (int x = 0; x < map.GetLength(0); x++){
 			for (int y = 0; y < map.GetLength(1); y++){
 				if (map[x,y] == 0){
@@ -118,9 +120,28 @@ public class MapManager : MonoBehaviour {
 				}
 				else if (map[x,y] == 2)	{
 					//road with ghost spawn
-					GameObject roadSpawned = Instantiate(roadGameObject, new Vector3(x,0,y),Quaternion.identity) as GameObject;
+					//GameObject roadSpawned = Instantiate(roadGameObject, new Vector3(x,0,y),Quaternion.identity) as GameObject;
 					//ghost
-					//GameObject ghostSpawned = Instantiate(ghostGameObject, new Vector3(x,0.5f,y),Quaternion.identity) as GameObject;
+					GameObject ghostSpawned = Instantiate(ghostGameObject, new Vector3(x,0.5f,y),Quaternion.identity) as GameObject;
+
+					string ghost = "";
+					switch(ghostNum)
+					{
+						case 0:
+							ghost = "GhostRed";
+							break;
+						case 1:
+							ghost = "GhostPink";
+							break;
+						case 2:
+							ghost = "GhostBlue";
+							break;
+						case 3:
+							ghost = "GhostOrange";
+							break;
+					}
+					ghostSpawned.AddComponent(ghost);
+					ghostNum++;
 				}
 				else if (map[x,y] == 3){
 					//road with pacman spawn
@@ -143,6 +164,11 @@ public class MapManager : MonoBehaviour {
 				}
 				else if (map[x,y] == 7)	{
 					//road without secret passage
+					GameObject roadSpawned = Instantiate(roadGameObject, new Vector3(x,0,y),Quaternion.identity) as GameObject;
+				}
+				else if (map[x,y] == 8) {
+					//'Illegal' road (ie. in front of prison
+					//Just like normal road, but difference for AI (and Pacman!)
 					GameObject roadSpawned = Instantiate(roadGameObject, new Vector3(x,0,y),Quaternion.identity) as GameObject;
 				}
 			}

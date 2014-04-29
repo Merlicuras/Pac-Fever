@@ -4,12 +4,12 @@ using System.Collections;
 public class Ghost : MovingObject {
 
 	//Making stuff prettier
-	enum Mode {Standby,Chase, Scatter, Frightened, Dead};
+	public enum Mode {Standby,Chase, Scatter, Frightened, Dead};
 	
 	
 	//Target and scatter location for pathfinding
-	Vector3 scatter;
-	Vector3 target;
+	public Vector3 scatter;
+	public Vector3 target;
 	
 	//Ghost current mode
 	Mode mode;
@@ -20,9 +20,12 @@ public class Ghost : MovingObject {
 	
 	//Will reverse on next tile if true
 	protected bool overwriteReversal;
+	
+	//For release sequence
+	protected bool isReleased;
 
 	// Use this for initialization
-	virtual void Start () {
+	public virtual void Start () {
 		
 		//Ghost begin by going up
 		base.up();
@@ -32,20 +35,69 @@ public class Ghost : MovingObject {
 		
 		overwriteReversal = false;
 		
+		isReleased = false;
+		
 		prevPos = transform.position;
 		haveTurnDir = false;
 	}
 	
-	void Update () {
+	public override void Update () {
 		//Standby does nothing
 		if(mode == Mode.Standby)
 			return;
+			
+		//Move and such
+		base.Update();
+		
+			
+		//Not out of prison yet?
+		if(!isReleased)
+		{
+			transform.position = new Vector3(14,0,18);
+			base.left();
+			base.isMoving = true;
+			
+			isReleased = true;
+/* 			GameObject mm = GameObject.FindGameObjectWithTag("MapCreate") as GameObject;
+			MapManager m = mm.GetComponent(typeof(MapManager)) as MapManager;
+			
+			//We're moving out
+			if(!base.isMoving)
+			{
+				//Move to middle of prison first
+				if(transform.position.x < m.map.GetLength(0)/2)
+					base.right();
+				else
+					base.left();
+					
+				base.isMoving = true;
+			}
+			else
+			{
+				//Already moving. Up yet?
+				if(base.direction != Vector3.forward) //up
+				{
+					//Else if we're near center, go up
+					if(Mathf.FloorToInt(transform.position.x) == m.map.GetLength(0)/2)
+						base.up();
+				}
+				else
+				{
+					//We ARE moving up. Are we out yet, then?
+					if(getTileType(transform.position) != 8)
+					{
+						isReleased = true;
+					}
+				}
+			}
+			return; */
+		}
 		
 		
 		
 		//Check if we are entering a new tile
 		if(Mathf.FloorToInt(prevPos.x) != Mathf.FloorToInt(transform.position.x)
-			|| Mathf.FloorToInt(prevPos.z) != Mathf.FloorToInt(transform.position.z)
+			|| Mathf.FloorToInt(prevPos.z) != Mathf.FloorToInt(transform.position.z))
 		{
 			//If yes, check if this tile has other pathways
 			int numPaths = 0;
@@ -67,7 +119,7 @@ public class Ghost : MovingObject {
 				haveTurnDir = true;
 				
 				//Measure is minimum euclidean distance
-				float minDist;
+				float minDist = 999999f;
 				
 				//Tile to check
 				Vector3 tile = pos+Vector3.right;
@@ -76,7 +128,7 @@ public class Ghost : MovingObject {
 				if(getTileType(tile) != 1)
 				{
 					//Vector from tile to target
-					tVec = target - tile;
+					Vector3 tVec = target - tile;
 					
 					//First to be checked is minimum so far
 					minDist = tVec.magnitude;
@@ -88,7 +140,7 @@ public class Ghost : MovingObject {
 				
 				if(getTileType(tile) != 1)
 				{
-					tVec = target - tile;
+					Vector3 tVec = target - tile;
 					
 					//if less than current min, replace
 					if(tVec.magnitude < minDist)
@@ -103,12 +155,12 @@ public class Ghost : MovingObject {
 				
 				if(getTileType(tile) != 1)
 				{
-					tVec = target - tile;
+					Vector3 tVec = target - tile;
 					
 					//if less than current min, replace
 					if(tVec.magnitude < minDist)
 					{
-						minDist = tVec.magnitude
+						minDist = tVec.magnitude;
 						turnDir = Vector3.left;
 					}
 				}
@@ -118,7 +170,7 @@ public class Ghost : MovingObject {
 				
 				if( getTileType(tile) != 1)
 				{
-					tVec = target - tile;
+					Vector3 tVec = target - tile;
 					
 					//if less than current min, replace
 					if(tVec.magnitude < minDist)
@@ -182,14 +234,13 @@ public class Ghost : MovingObject {
 		
 		prevPos = transform.position;
 		
-		//Move and such
-		base.Update();
 	}
 	
 	int getTileType(Vector3 pos)
 	{
 		//int[x,y(z)] map
-		MapManager m = GameObject.FindGameObjectWithTag("MapCreate") as MapManager;
+		GameObject mm = GameObject.FindGameObjectWithTag("MapCreate") as GameObject;
+		MapManager m = mm.GetComponent(typeof(MapManager)) as MapManager;
 		
 		return m.map[Mathf.FloorToInt(pos.x),Mathf.FloorToInt(pos.z)];
 	}
@@ -199,17 +250,9 @@ public class Ghost : MovingObject {
 		
 	}
 	
-	void Release()
-	{
-	}
-	
-	void changeMode(Mode m)
-	{
-		//We're moving again!
-		if(mode == Mode.Standby)	//It's before the switch to allow
-			base.isMoving = true;	// standby->standby switches
-								//for whatever reason one would want that
-		
+	public void changeMode(Mode m)
+	{	
+		Debug.Log ("Ghost " + gameObject.tag + " changing to mode " + m.ToString());
 		switch(m)
 		{
 			case Mode.Standby:
@@ -246,7 +289,7 @@ public class Ghost : MovingObject {
 		
 	}
 	
-	virtual void updateTarget()
+	virtual public void updateTarget()
 	{
 		// Target tile for pathfinding. Specific for each Ghost.
 	}

@@ -3,19 +3,21 @@ using System.Collections;
 
 public class GhostRed : Ghost {
 
-	void Start () {
+	public override void Start () {
 		base.Start();
+		gameObject.tag = "GhostRed";
 		
 		//Scatter location at top right
-		MapManager m = GameObject.FindGameObjectWithTag("MapCreate") as MapManager;
-		base.scatter = Vector3(m.map.GetLength(0)-1,0,-2);
+		GameObject mm = GameObject.FindGameObjectWithTag("MapCreate") as GameObject;
+		MapManager m = mm.GetComponent(typeof(MapManager)) as MapManager;
+		base.scatter = new Vector3(m.map.GetLength(0)-1,0,-2);
 	}
 
-	void updateTarget()
+	public override void updateTarget()
 	{
 		//Target is le Pacman!
-		pac = GameObject.FindGameObjectWithTag("Player") as Pacman;
-		base.target = pac.position;
+		GameObject pacObj = GameObject.FindGameObjectWithTag("Player") as GameObject;
+		base.target = pacObj.transform.position;
 	}
 	
 }
