@@ -16,15 +16,19 @@ public abstract class PointObject : MonoBehaviour {
 	{
 		//Debug.Log("Debug Checkpoint: PointObject.Start"); //see if the child inherits
 		scoreboard = GameObject.FindGameObjectWithTag("Scoreboard");
+		mapCreate = GameObject.FindGameObjectWithTag("MapCreate");
 	}
 
 	void OnTriggerEnter(Collider other){
 		if(other.gameObject.tag == "Player"){
 			Debug.Log ("collision");
 			scoreboard.SendMessage("AddPoints", point);
+
+			GameManager gm = mapCreate.GetComponent("GameManager") as GameManager;
+			gm.cheeses++;
+
 			if(this.gameObject.tag == "Fruit"){
 				Debug.Log ("Fruit collision");
-				mapCreate = GameObject.FindGameObjectWithTag("MapCreate");
 				Vector3 fruit = this.gameObject.transform.position;
 				mapCreate.SendMessage("FruitRespawn", fruit);
 			}

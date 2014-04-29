@@ -113,6 +113,7 @@ public class MapManager : MonoBehaviour {
 					//Debug.Log ("y: " + y + ". x: " + x + ". Type: " + map[y,x]); //-Only used for testing the instantiate overload problem
 					GameObject roadSpawned = Instantiate(roadGameObject, new Vector3(x,0,y),Quaternion.identity) as GameObject;
 					GameObject cheeseSpawned = Instantiate(cheeseGameObject, new Vector3(x,0.75f,y),Quaternion.identity) as GameObject;
+					cheeseSpawned.gameObject.tag = "Cheese";
 				}
 				else if (map[x,y] == 1){
 					//wall

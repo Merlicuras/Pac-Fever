@@ -17,6 +17,7 @@ public class Ghost : MovingObject {
 	protected Vector3 prevPos;
 	protected Vector3 turnDir;
 	protected bool haveTurnDir;
+	int tn;
 	
 	//Will reverse on next tile if true
 	protected bool overwriteReversal;
@@ -26,7 +27,9 @@ public class Ghost : MovingObject {
 
 	// Use this for initialization
 	public virtual void Start () {
-		
+		base.Start ();
+
+		gameObject.collider.enabled = false;
 		//Ghost begin by going up
 		base.up();
 		
@@ -48,17 +51,20 @@ public class Ghost : MovingObject {
 			
 		//Move and such
 		base.Update();
+
+		if (mode == Mode.Chase)
+			updateTarget ();
 		
 			
 		//Not out of prison yet?
 		if(!isReleased)
 		{
-			transform.position = new Vector3(14,0,18);
-			base.left();
-			base.isMoving = true;
-			
-			isReleased = true;
-/* 			GameObject mm = GameObject.FindGameObjectWithTag("MapCreate") as GameObject;
+//			transform.position = new Vector3(14,0,18);
+//			base.left();
+//			base.isMoving = true;
+//			
+//			isReleased = true;
+ 			GameObject mm = GameObject.FindGameObjectWithTag("MapCreate") as GameObject;
 			MapManager m = mm.GetComponent(typeof(MapManager)) as MapManager;
 			
 			//We're moving out
@@ -78,19 +84,22 @@ public class Ghost : MovingObject {
 				if(base.direction != Vector3.forward) //up
 				{
 					//Else if we're near center, go up
-					if(Mathf.FloorToInt(transform.position.x) == m.map.GetLength(0)/2)
+					if(base.direction == Vector3.right && Mathf.FloorToInt(transform.position.x) > m.map.GetLength(0)/2-1
+					   || base.direction == Vector3.left && Mathf.FloorToInt(transform.position.x) < m.map.GetLength(0)/2)
 						base.up();
 				}
 				else
 				{
 					//We ARE moving up. Are we out yet, then?
-					if(getTileType(transform.position) != 8)
+					if(getTileType(transform.position) == 5 )
 					{
+						//Debug.Log(gameObject.tag.ToString() + " released");
+						base.left();
 						isReleased = true;
 					}
 				}
 			}
-			return; */
+			return; 
 		}
 		
 		
@@ -103,13 +112,13 @@ public class Ghost : MovingObject {
 			int numPaths = 0;
 			Vector3 pos = transform.position;
 			
-			if(getTileType(pos+Vector3.right) != 1)
+			if(getTileType(pos+Vector3.right) != 1 && getTileType(pos+Vector3.right) != 8)
 				numPaths++;
-			if(getTileType(pos+Vector3.back) != 1)
+			if(getTileType(pos+Vector3.back) != 1 && getTileType(pos+Vector3.back) != 8)
 				numPaths++;
-			if(getTileType(pos+Vector3.left) != 1)
+			if(getTileType(pos+Vector3.left) != 1 && getTileType(pos+Vector3.left) != 8)
 				numPaths++;
-			if(getTileType(pos+Vector3.forward) != 1)
+			if(getTileType(pos+Vector3.forward) != 1 && getTileType(pos+Vector3.forward) != 8)
 				numPaths++;
 			
 			if(numPaths > 2)
@@ -125,7 +134,7 @@ public class Ghost : MovingObject {
 				Vector3 tile = pos+Vector3.right;
 				
 				//We can't reverse, so check if tile in question is position
-				if(getTileType(tile) != 1)
+				if(getTileType(tile) != 1 && getTileType(tile) != 8 && base.direction*-1 != Vector3.right)
 				{
 					//Vector from tile to target
 					Vector3 tVec = target - tile;
@@ -138,7 +147,7 @@ public class Ghost : MovingObject {
 				
 				tile = pos+Vector3.back;
 				
-				if(getTileType(tile) != 1)
+				if(getTileType(tile) != 1 && getTileType(tile) != 8 && base.direction*-1 != Vector3.back)
 				{
 					Vector3 tVec = target - tile;
 					
@@ -153,7 +162,7 @@ public class Ghost : MovingObject {
 				
 				tile = pos+Vector3.left;
 				
-				if(getTileType(tile) != 1)
+				if(getTileType(tile) != 1 && getTileType(tile) != 8 && base.direction*-1 != Vector3.left)
 				{
 					Vector3 tVec = target - tile;
 					
@@ -168,7 +177,7 @@ public class Ghost : MovingObject {
 				
 				tile = pos+Vector3.forward;
 				
-				if( getTileType(tile) != 1)
+				if( getTileType(tile) != 1 && getTileType(tile) != 8 && base.direction*-1 != Vector3.forward)
 				{
 					Vector3 tVec = target - tile;
 					
@@ -186,17 +195,16 @@ public class Ghost : MovingObject {
 				//We have 1 other direction. Check for corners
 				if(getTileType(transform.position + base.direction) == 1)
 				{
-					//Find the direction to turn
 					Vector3 p = transform.position;
-					Vector3 next = p+base.direction;
+					//Find the direction to turn
 					
-					if(next+Vector3.right!= p && getTileType(next+Vector3.right) != 1)
+					if(Vector3.right!= base.direction*-1 && getTileType(p + Vector3.right) != 1)
 						turnDir = Vector3.right;
-					else if(next+Vector3.back != p && getTileType(next+Vector3.back) != 1)
+					else if(Vector3.back != base.direction*-1 && getTileType(p + Vector3.back) != 1)
 						turnDir = Vector3.back;
-					else if(next+Vector3.left != p && getTileType(next+Vector3.left) != 1)
+					else if(Vector3.left != base.direction*-1 && getTileType(p + Vector3.left) != 1)
 						turnDir = Vector3.left;
-					else if(next+Vector3.forward != p && getTileType(next+Vector3.forward) != 1)
+					else if(Vector3.forward != base.direction*-1 && getTileType(p + Vector3.forward) != 1)
 						turnDir = Vector3.forward;
 					
 					haveTurnDir = true;
@@ -213,11 +221,10 @@ public class Ghost : MovingObject {
 		{
 			//Check if we are approximately in the middle of the pathway
 			float distFromX,distFromZ;
-			distFromX = transform.position.x - Mathf.Floor(transform.position.x);
-			distFromZ = transform.position.z - Mathf.Floor(transform.position.z);
-			
-			if(distFromX > 0.45 && distFromX < 0.55
-				&& distFromZ > 0.45 && distFromZ < 0.55)
+			distFromX = Mathf.Abs(transform.position.x) - Mathf.Abs(Mathf.Floor(transform.position.x));
+			distFromZ = Mathf.Abs(transform.position.z) - Mathf.Abs(Mathf.Floor(transform.position.z));
+			if(distFromX < 0.1f
+				&& distFromZ < 0.1f)
 			{
 				//Turn!
 				base.direction = turnDir;
@@ -245,14 +252,8 @@ public class Ghost : MovingObject {
 		return m.map[Mathf.FloorToInt(pos.x),Mathf.FloorToInt(pos.z)];
 	}
 	
-	void Respawn()
-	{
-		
-	}
-	
 	public void changeMode(Mode m)
 	{	
-		Debug.Log ("Ghost " + gameObject.tag + " changing to mode " + m.ToString());
 		switch(m)
 		{
 			case Mode.Standby:
