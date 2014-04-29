@@ -10,9 +10,13 @@ public class Ghost : MovingObject {
 	//Target and scatter location for pathfinding
 	public Vector3 scatter;
 	public Vector3 target;
-	
+
+	Vector3 startPos;
+
 	//Ghost current mode
 	public Mode mode;
+
+	public Color color;
 	
 	protected Vector3 prevPos;
 	protected Vector3 turnDir;
@@ -43,6 +47,8 @@ public class Ghost : MovingObject {
 		
 		prevPos = transform.position;
 		haveTurnDir = false;
+
+		startPos = transform.position;
 	}
 	
 	public override void Update () {
@@ -53,6 +59,23 @@ public class Ghost : MovingObject {
 		//Move and such
 		base.Update();
 
+		//Check if the dead body is home yet
+		if (mode == Mode.Dead)
+		{
+			if(getTileType(transform.position) == 2)
+			{
+				GameObject mm = GameObject.FindGameObjectWithTag("MapCreate") as GameObject;
+				GameManager gm = mm.GetComponent("GameManager") as GameManager;
+				mode = gm.currentMode;
+				renderer.material.color = color;
+				base.up ();
+				base.isMoving = false;
+				base.speed *= 2;
+				isReleased = false;
+			}
+			return;
+		}
+
 		if (mode == Mode.Chase)
 			updateTarget ();
 		
@@ -60,11 +83,6 @@ public class Ghost : MovingObject {
 		//Not out of prison yet?
 		if(!isReleased)
 		{
-//			transform.position = new Vector3(14,0,18);
-//			base.left();
-//			base.isMoving = true;
-//			
-//			isReleased = true;
  			GameObject mm = GameObject.FindGameObjectWithTag("MapCreate") as GameObject;
 			MapManager m = mm.GetComponent(typeof(MapManager)) as MapManager;
 			
@@ -127,68 +145,114 @@ public class Ghost : MovingObject {
 				//Update target based on possible turn decision
 				// note: reversal not allowed (unless overruled later)
 				haveTurnDir = true;
-				
-				//Measure is minimum euclidean distance
-				float minDist = 999999f;
-				
-				//Tile to check
-				Vector3 tile = pos+Vector3.right;
-				
-				//We can't reverse, so check if tile in question is position
-				if(getTileType(tile) != 1 && getTileType(tile) != 8 && base.direction*-1 != Vector3.right)
-				{
-					//Vector from tile to target
-					Vector3 tVec = target - tile;
-					
-					//First to be checked is minimum so far
-					minDist = tVec.magnitude;
-					turnDir = Vector3.right;
-				}
-				
-				
-				tile = pos+Vector3.back;
-				
-				if(getTileType(tile) != 1 && getTileType(tile) != 8 && base.direction*-1 != Vector3.back)
-				{
-					Vector3 tVec = target - tile;
-					
-					//if less than current min, replace
-					if(tVec.magnitude < minDist)
+
+				//But first check if frightened - then choose (pseudo)randomly
+				if(mode == Mode.Frightened)
+				{	Vector3 chosen = -base.direction;
+					int rand = 0;
+
+					do
 					{
+						rand = Random.Range(1,3);
+						if(getTileType(pos+Vector3.right) != 1 && getTileType(pos+Vector3.right) != 8 
+						   && -base.direction != Vector3.right)
+						{
+							if(rand == 2)
+								chosen = Vector3.right;
+						}
+
+						rand = Random.Range(1,3);
+						if(getTileType(pos+Vector3.back) != 1 && getTileType(pos+Vector3.back) != 8 
+						   && -base.direction != Vector3.back)
+						{
+							if(rand == 2)
+								chosen = Vector3.back;
+						}
+
+						rand = Random.Range(1,3);
+						if(getTileType(pos+Vector3.left) != 1 && getTileType(pos+Vector3.left) != 8 
+						   && -base.direction != Vector3.left)
+						{
+							if(rand == 2)
+								chosen = Vector3.left;
+						}
+
+						rand = Random.Range(1,3);
+						if(getTileType(pos+Vector3.forward) != 1 && getTileType(pos+Vector3.forward) != 8 
+						   && -base.direction != Vector3.forward)
+						{
+							if(rand == 2)
+								chosen = Vector3.forward;
+						}
+					} while(chosen == -base.direction);
+					turnDir = chosen;
+
+				}
+				else
+				{
+					//Measure is minimum euclidean distance
+					float minDist = 999999f;
+					
+					//Tile to check
+					Vector3 tile = pos+Vector3.right;
+					
+					//We can't reverse, so check if tile in question is position
+					if(getTileType(tile) != 1 && getTileType(tile) != 8 && base.direction*-1 != Vector3.right)
+					{
+						//Vector from tile to target
+						Vector3 tVec = target - tile;
+						
+						//First to be checked is minimum so far
 						minDist = tVec.magnitude;
-						turnDir = Vector3.back;
+						turnDir = Vector3.right;
+					}
+					
+					
+					tile = pos+Vector3.back;
+					
+					if(getTileType(tile) != 1 && getTileType(tile) != 8 && base.direction*-1 != Vector3.back)
+					{
+						Vector3 tVec = target - tile;
+						
+						//if less than current min, replace
+						if(tVec.magnitude < minDist)
+						{
+							minDist = tVec.magnitude;
+							turnDir = Vector3.back;
+						}
+					}
+					
+					
+					tile = pos+Vector3.left;
+					
+					if(getTileType(tile) != 1 && getTileType(tile) != 8 && base.direction*-1 != Vector3.left)
+					{
+						Vector3 tVec = target - tile;
+						
+						//if less than current min, replace
+						if(tVec.magnitude < minDist)
+						{
+							minDist = tVec.magnitude;
+							turnDir = Vector3.left;
+						}
+					}
+					
+					
+					tile = pos+Vector3.forward;
+					
+					if( getTileType(tile) != 1 && getTileType(tile) != 8 && base.direction*-1 != Vector3.forward)
+					{
+						Vector3 tVec = target - tile;
+						
+						//if less than current min, replace
+						if(tVec.magnitude < minDist)
+						{
+							minDist = tVec.magnitude;
+							turnDir  = Vector3.forward;
+						}
 					}
 				}
-				
-				
-				tile = pos+Vector3.left;
-				
-				if(getTileType(tile) != 1 && getTileType(tile) != 8 && base.direction*-1 != Vector3.left)
-				{
-					Vector3 tVec = target - tile;
-					
-					//if less than current min, replace
-					if(tVec.magnitude < minDist)
-					{
-						minDist = tVec.magnitude;
-						turnDir = Vector3.left;
-					}
-				}
-				
-				
-				tile = pos+Vector3.forward;
-				
-				if( getTileType(tile) != 1 && getTileType(tile) != 8 && base.direction*-1 != Vector3.forward)
-				{
-					Vector3 tVec = target - tile;
-					
-					//if less than current min, replace
-					if(tVec.magnitude < minDist)
-					{
-						minDist = tVec.magnitude;
-						turnDir  = Vector3.forward;
-					}
-				}
+
 					
 			}
 			else
@@ -264,11 +328,18 @@ public class Ghost : MovingObject {
 			
 			case Mode.Dead:
 				//Become eyes, run back & respawn
-			Debug.Log(gameObject.tag + " Dead");
+				renderer.material.color = Color.gray;
+				base.direction = Vector3.Normalize(startPos-transform.position);
+				base.speed *= 0.5f;
+				
+			
+				GameObject scoreboard = GameObject.FindGameObjectWithTag("Scoreboard");
+				scoreboard.SendMessage("AddPoints", 100);
 				break;
 			
 			case Mode.Frightened:
 				//Become blue, force reversal, random turns
+				overwriteReversal = true;
 				break;
 			
 			case Mode.Chase:

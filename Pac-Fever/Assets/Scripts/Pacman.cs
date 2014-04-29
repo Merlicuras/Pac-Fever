@@ -4,8 +4,8 @@ using System.Collections;
 public class Pacman : MovingObject {
 
 	
-	private int lives;
-	private bool state;
+	public int lives;
+	public bool state;
 	public bool ghosts;
 	public GUIText winText;
 	public GUIText livesText;
@@ -20,25 +20,24 @@ public class Pacman : MovingObject {
 
 
 
-	void OnCollisionEnter(Collision c)
-	{
-		if (c.gameObject.tag == "Ghost")
-		{
-			Debug.Log("Success");
-		}
-	}
+
 	void OnTriggerEnter(Collider other){
-		if(other.gameObject.tag == "Ghost"){
+		if(other.gameObject.name == "ghost"){
 			Destroy(this.gameObject);
 			Debug.Log ("collision");
 			lives=lives-1;
 			SetLivesText ();
 		}
-		if(other.gameObject.tag == "UberCheese"){
+		if(other.gameObject.name == "UberCheese"){
 			StartCoroutine(StateChange());
 
-			Debug.Log ("uber collision");
+			Debug.Log ("collision");
 		}
+	}
+
+	public void setUber()
+	{
+		StartCoroutine(StateChange());
 	}
 	
 
@@ -52,7 +51,7 @@ public class Pacman : MovingObject {
 
 	}
 
-	void SetLivesText (){
+	public void SetLivesText (){
 		livesText.text = "Lives: " + lives.ToString();
 		if (lives <= 0){
 			winText.text = "GAME OVER";

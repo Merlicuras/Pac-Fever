@@ -10,6 +10,10 @@ public class GameManager : MonoBehaviour {
 	int pinkSecs;
 	int orangeSecs;
 	float startTime;
+	public Ghost.Mode currentMode;
+	bool uCheese;
+
+	Pacman pac = null;
 
 	void Start () {
 		//Initiate start screen
@@ -19,6 +23,9 @@ public class GameManager : MonoBehaviour {
 		pinkSecs = 5;
 		orangeSecs = 10;
 		startTime = Time.time;
+		currentMode = Ghost.Mode.Chase;
+		uCheese = false;
+
 	}
 	
 	// Update is called once per frame
@@ -69,18 +76,55 @@ public class GameManager : MonoBehaviour {
 			startTime = Time.time;
 			break;
 		}
+
+		if (pac == null)
+		{
+			GameObject g = GameObject.FindGameObjectWithTag ("Player");
+			pac = g.GetComponent ("Pacman") as Pacman;
+			Debug.Log(pac.tag);
+		}
+
+		if (uCheese && !pac.state)
+			uberCheese (false);
+		else if(!uCheese && pac.state)
+			uberCheese(true);
 	}
 
-	public void uberCheese()
+	public void uberCheese(bool enabled)
 	{
 		//Change mode to frightened on all ghosts (except dead ones)
-		GameObject[] ghosts;
-		ghosts = GameObject.FindGameObjectsWithTag("Ghost");
+		GameObject Gr = GameObject.FindGameObjectWithTag("GhostRed");
+		GameObject Gb = GameObject.FindGameObjectWithTag ("GhostBlue");
+		GameObject Gp = GameObject.FindGameObjectWithTag ("GhostPink");
+		GameObject Go = GameObject.FindGameObjectWithTag ("GhostOrange");
 			
-		foreach (GameObject ghost in ghosts) {
-			Ghost g = ghost.GetComponent("Ghost") as Ghost;
-			if(g.mode != Ghost.Mode.Dead)
-				g.changeMode(Ghost.Mode.Frightened);
+		GameObject [] gAll = new GameObject[4]{Gr,Gb,Gp,Go};
+
+		for(int i = 0; i < 4; i++)
+		{
+			Ghost g = gAll[i].GetComponent("Ghost") as Ghost;
+
+			if(enabled)
+			{
+				Debug.Log("Ubercheese enabled");
+				uCheese = true;
+				if(g.mode != Ghost.Mode.Dead && g.mode != Ghost.Mode.Standby)
+				{
+					g.changeMode(Ghost.Mode.Frightened);
+					g.renderer.material.color = Color.yellow;
+				}
+
+			}
+			else
+			{
+				Debug.Log("Ubercheese disabled");
+				uCheese = false;
+				if(g.mode != Ghost.Mode.Dead && g.mode != Ghost.Mode.Standby)
+				{
+					g.changeMode(currentMode);
+					g.renderer.material.color = g.color;
+				}
+			}
 		}
 	}
 }

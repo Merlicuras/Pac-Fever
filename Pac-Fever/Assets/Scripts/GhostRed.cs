@@ -7,6 +7,7 @@ public class GhostRed : Ghost {
 		base.Start();
 		gameObject.tag = "GhostRed";
 		renderer.material.color = Color.red;
+		base.color = Color.red;
 		
 		//Scatter location at top right
 		GameObject mm = GameObject.FindGameObjectWithTag("MapCreate") as GameObject;

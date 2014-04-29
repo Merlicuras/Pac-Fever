@@ -9,7 +9,8 @@ public class GhostOrange : Ghost {
 		
 		//base.scatter = new Vector2(Bottom left, 2 down);
 		gameObject.tag = "GhostOrange";
-		renderer.material.color = Color.Lerp (Color.red, Color.yellow, 0.5f);
+		base.color = Color.Lerp (Color.red, Color.yellow, 0.5f);
+		renderer.material.color = color;
 
 		GameObject mm = GameObject.FindGameObjectWithTag("MapCreate") as GameObject;
 		MapManager m = mm.GetComponent(typeof(MapManager)) as MapManager;

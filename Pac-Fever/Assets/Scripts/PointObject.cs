@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 //Parent class of point giving objects. Contains common fields for point objects.
@@ -31,6 +31,14 @@ public abstract class PointObject : MonoBehaviour {
 				Vector3 fruit = this.gameObject.transform.position;
 				mapCreate.SendMessage("FruitRespawn", fruit);
 			}
+
+			Pacman p = other.GetComponent("Pacman") as Pacman;
+
+			if(this.gameObject.tag == "UberCheese")
+			{
+				p.setUber();
+			}
+
 			Destroy(this.gameObject);
 		}
 	}
