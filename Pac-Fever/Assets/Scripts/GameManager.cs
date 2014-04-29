@@ -19,10 +19,9 @@ public class GameManager : MonoBehaviour {
 		//Initiate start screen
 		level = 1;
 		cheeses = 0;
-		levelStage = 0;
+		levelStage = -1;
 		pinkSecs = 5;
 		orangeSecs = 10;
-		startTime = Time.time;
 		currentMode = Ghost.Mode.Chase;
 		uCheese = false;
 
@@ -31,7 +30,25 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		switch (levelStage) {
-			case 0:
+		case -2:
+			//Replay or quit, wait and see
+			pacmanKilled();
+			levelStage = -2;
+			break;
+
+		case -1:
+			//Pre-start. Show helper text
+			if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.W)
+			   || Input.GetKeyDown(KeyCode.D) ||Input.GetKeyDown(KeyCode.S))
+			{
+				GameObject g = GameObject.FindGameObjectWithTag ("Player");
+				pac = g.GetComponent ("Pacman") as Pacman;
+				pac.isMoving = true;
+				startTime = Time.time;
+				levelStage = 0;
+			}
+			break;
+		case 0:
 			//Start fase. Release Red!
 			GameObject Gro = GameObject.FindGameObjectWithTag("GhostRed");
 			Ghost Gr = Gro.GetComponent("GhostRed") as Ghost;
@@ -125,6 +142,48 @@ public class GameManager : MonoBehaviour {
 					g.renderer.material.color = g.color;
 				}
 			}
+		}
+	}
+
+	public void pacmanKilled()
+	{
+		//Reset pacman and ghosts. Wait a bit and start!
+		GameObject Gr = GameObject.FindGameObjectWithTag("GhostRed");
+		GameObject Gb = GameObject.FindGameObjectWithTag ("GhostBlue");
+		GameObject Gp = GameObject.FindGameObjectWithTag ("GhostPink");
+		GameObject Go = GameObject.FindGameObjectWithTag ("GhostOrange");
+		GameObject P = GameObject.FindGameObjectWithTag ("Player");
+
+		Gr.SendMessage ("Reset");
+		Gb.SendMessage ("Reset");
+		Gp.SendMessage ("Reset");
+		Go.SendMessage ("Reset");
+		P.SendMessage ("Reset");
+
+		levelStage = -1;
+	}
+
+	public void gameOver()
+	{
+		//Game over. Allow replay (reload level) or quit
+		levelStage = -2;
+	}
+
+	public void OnGUI()
+	{
+		if (levelStage != -2)
+						return;
+
+		GUI.Box(new Rect(310,310,100,90), "GAME OVER");
+		
+		// Make the first button. If it is pressed, Application.Loadlevel (1) will be executed
+		if(GUI.Button(new Rect(320,340,80,20), "Replay")) {
+			Application.LoadLevel(Application.loadedLevel);
+		}
+
+		// Make the second button.
+		if(GUI.Button(new Rect(320,370,80,20), "Quit")) {
+			Application.Quit ();
 		}
 	}
 }

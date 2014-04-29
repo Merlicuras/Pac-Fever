@@ -11,7 +11,6 @@ public class Ghost : MovingObject {
 	public Vector3 scatter;
 	public Vector3 target;
 
-	Vector3 startPos;
 
 	//Ghost current mode
 	public Mode mode;
@@ -29,6 +28,9 @@ public class Ghost : MovingObject {
 	//For release sequence
 	protected bool isReleased;
 
+	private Mode oriMode;
+	Vector3 startPos;
+
 	// Use this for initialization
 	public virtual void Start () {
 		base.Start ();
@@ -37,7 +39,7 @@ public class Ghost : MovingObject {
 		gameObject.tag = "Ghost";
 		//Ghost begin by going up
 		base.up();
-		
+
 		//Stand still
 		changeMode(Mode.Standby);
 		
@@ -49,6 +51,16 @@ public class Ghost : MovingObject {
 		haveTurnDir = false;
 
 		startPos = transform.position;
+		oriMode = Mode.Standby;
+
+
+	}
+
+	public void Reset()
+	{
+		mode = oriMode;
+		transform.position = startPos;
+		Start ();
 	}
 	
 	public override void Update () {
@@ -364,7 +376,7 @@ public class Ghost : MovingObject {
 	}
 	
 	virtual public void updateTarget()
-	{
+	{	
 		// Target tile for pathfinding. Specific for each Ghost.
 	}
 
@@ -374,6 +386,8 @@ public class Ghost : MovingObject {
 		{
 			if(mode == Mode.Frightened)
 				changeMode(Mode.Dead);
+			else if(mode != Mode.Dead)
+				other.SendMessage("killed");
 		}
 	}
 }

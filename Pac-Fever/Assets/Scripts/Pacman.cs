@@ -3,7 +3,8 @@ using System.Collections;
 
 public class Pacman : MovingObject {
 
-	
+
+	private Vector3 oriPos;
 	public int lives;
 	public bool state;
 	public bool ghosts;
@@ -20,19 +21,19 @@ public class Pacman : MovingObject {
 
 
 
+	public void killed()
+	{
+		GameManager gm = GameObject.FindGameObjectWithTag ("MapCreate").GetComponent ("GameManager") as GameManager;
+		lives=lives-1;
+		if (lives == 0)
+			gm.gameOver ();
+		else
+			gm.pacmanKilled ();
 
-	void OnTriggerEnter(Collider other){
-		if(other.gameObject.name == "ghost"){
-			Destroy(this.gameObject);
-			Debug.Log ("collision");
-			lives=lives-1;
-			SetLivesText ();
-		}
-		if(other.gameObject.name == "UberCheese"){
-			StartCoroutine(StateChange());
+		GameObject scoreboard = GameObject.FindGameObjectWithTag("Scoreboard");
+		scoreboard.SendMessage("setLives", lives);
 
-			Debug.Log ("collision");
-		}
+		Reset ();
 	}
 
 	public void setUber()
@@ -46,16 +47,17 @@ public class Pacman : MovingObject {
 		base.Start();
 		lives = 3;
 		state = false;
-		winText.text = " ";
-		SetLivesText ();
-
+		oriPos = transform.position;
 	}
 
-	public void SetLivesText (){
-		livesText.text = "Lives: " + lives.ToString();
-		if (lives <= 0){
-			winText.text = "GAME OVER";
-		}
+	public void Reset()
+	{
+		transform.position = oriPos;
+		base.direction = Vector3.left;
+		base.isMoving = false;
+		rigidbody.velocity = Vector3.zero;
+
+		//Need to wait for Start() function
 	}
 	
 	// Update is called once per frame
